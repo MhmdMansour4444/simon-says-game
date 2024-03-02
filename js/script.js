@@ -1,22 +1,28 @@
 const playButton = document.getElementById("play");
 const infoText = document.getElementById("info");
+let gameStarted = false;
+const maxSequenceLength = 12;
 
 playButton.addEventListener("click", function () {
-  infoText.textContent = "Lets go! Try to keep up with the sequence.";
+  if (!gameStarted) {
+    infoText.textContent = "Let's go! Try to keep up with the sequence.";
+    const randomSequence = generateRandomSequence(maxSequenceLength);
+    displaySequence(randomSequence);
+    gameStarted = true;
+
+    console.log(randomSequence);
+  }
+
   function generateRandomSequence(length) {
     const colors = ["green", "red", "blue", "yellow"];
-    const Colorsequence = [];
+    const colorSequence = [];
 
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * colors.length);
-      Colorsequence.push(colors[randomIndex]);
+      colorSequence.push(colors[randomIndex]);
     }
-    return Colorsequence;
+    return colorSequence;
   }
-  const randomSequence = generateRandomSequence(12);
-  console.log(randomSequence);
-
-  displaySequence(randomSequence);
 });
 
 function displaySequence(sequence) {
