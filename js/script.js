@@ -15,4 +15,18 @@ playButton.addEventListener("click", function () {
   }
   const randomSequence = generateRandomSequence(12);
   console.log(randomSequence);
+
+  displaySequence(randomSequence);
 });
+
+function displaySequence(sequence) {
+  sequence.forEach(function (color, index) {
+    setTimeout(function () {
+      const tile = document.querySelector(`[data-tile="${color}"]`);
+      tile.classList.remove("inactive");
+      setTimeout(function () {
+        tile.classList.add("inactive");
+      }, 500);
+    }, index * 1000);
+  });
+}
