@@ -2,7 +2,8 @@ const playButton = document.getElementById("play");
 const infoText = document.getElementById("info");
 const maxSequenceLength = 4;
 const board = document.querySelector(".board");
-
+const levelElt = document.getElementById("level");
+const highScoreElt = document.getElementById("high-score");
 const audioFiles = {
   blueSound: "sounds/blue.mp3",
   redSound: "sounds/red.mp3",
@@ -15,7 +16,6 @@ const audioFiles = {
 let gameStarted = false;
 let playerSequence = [];
 let currentStep = 0;
-let highScore = 0;
 let currentLevel = 0;
 let randomSequence = [];
 let sequenceIndex = 1;
@@ -24,6 +24,7 @@ let sequence = [];
 let tilesSelected = [];
 const colors = ["green", "red", "blue", "yellow"];
 let score = 0;
+let highestScore = 0;
 
 let tiles = document.querySelectorAll(".tile");
 tiles.forEach((el, index) => {
@@ -33,21 +34,11 @@ tiles.forEach((el, index) => {
 });
 
 playButton.addEventListener("click", function () {
-  infoText.textContent = "Let's go! Try to keep up with the sequence.";
+  infoText.textContent = "Let's go! Try to keep up with the sequence until 12 to win!!";
+  resetScore();
   resetSequence();
   extendSequence();
   displaySequence(sequence);
-  
-
-  function generateRandomSequence(length) {
-    const colors = ["green", "red", "blue", "yellow"];
-    const colorSequence = [];
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * colors.length);
-      colorSequence.push(colors[randomIndex]);
-    }
-    return colorSequence;
-  }
 });
 
 function displaySequence(sequence) {
@@ -84,6 +75,7 @@ function isSequenceComplete() {
 function extendSequence() {
   const randomIndex = Math.floor(Math.random() * colors.length);
   sequence.push(colors[randomIndex]);
+  levelElt.innerHTML = sequence.length;
 }
 
 function isSequenceCorrect() {
@@ -95,24 +87,39 @@ function isSequenceCorrect() {
   return true;
 }
 
+function increaseScore() {
+  score++;
+  if (score > highestScore) highestScore = score;
+  highScoreElt.innerHTML = highestScore;
+}
+
+function resetScore() {
+  score = 0;
+}
+
 function GameEnded(winState) {
   if (winState) alert("You Won :)");
   else alert("You Lost!");
   resetSelection();
   resetSequence();
+  resetScore();
 }
+
 
 function playerClicks(selection) {
   tilesSelected.push(selection);
+  playSound(selection);
+
+
   console.log("PlayerSelected");
   console.log(tilesSelected);
 
   if (isSequenceCorrect()) {
     // Sequence is Correct
-
     if (isSequenceComplete()) {
       extendSequence();
       resetSelection();
+      increaseScore();
       displaySequence(sequence);
     }
   } else {
