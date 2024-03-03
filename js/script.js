@@ -51,12 +51,11 @@ window.onload = function () {
   }
 
   //// new functions
-  function setBoardState(clickableState){
-    if(clickableState){
+  function setBoardState(clickableState) {
+    if (clickableState) {
       board.classList.remove("unclickable");
-    }
-    else{
-      board.classList.add("unclickable")
+    } else {
+      board.classList.add("unclickable");
     }
   }
 
@@ -76,11 +75,10 @@ window.onload = function () {
     if (sequence.length === maxSequenceLength) {
       GameEnded(true);
     }
-   
+
     const randomIndex = Math.floor(Math.random() * colors.length);
     sequence.push(colors[randomIndex]);
     levelElt.innerHTML = sequence.length;
-    
   }
 
   function isSequenceCorrect() {
@@ -95,7 +93,7 @@ window.onload = function () {
   function increaseScore() {
     score++;
     if (score > highestScore) highestScore = score;
-    highScoreElt.innerHTML = highestScore ;
+    highScoreElt.innerHTML = highestScore;
   }
 
   function resetScore() {
@@ -105,23 +103,18 @@ window.onload = function () {
   function GameEnded(winState) {
     if (winState) {
       setTimeout(() => {
-      var audio = new Audio(audioFiles.gameWin);
-      audio.play();
+        var audio = new Audio(audioFiles.gameWin);
+        audio.play();
       }, 1000);
-      infoText.textContent =
-      "YOU WON!! Press PLAY to start again";
-
+      infoText.textContent = "YOU WON!! Press PLAY to start again";
     } else {
       var audio = new Audio(audioFiles.wrong);
       audio.play();
-      infoText.textContent =
-      "GAME OVER!";
-
+      infoText.textContent = "GAME OVER!";
     }
     resetSelection();
     resetSequence();
     resetScore();
-    
   }
 
   function playerClicks(selection) {
@@ -140,7 +133,7 @@ window.onload = function () {
         increaseScore();
         displaySequence(sequence);
       }
-    } else  {
+    } else {
       //Sequence is Wrong
       GameEnded(false);
     }
