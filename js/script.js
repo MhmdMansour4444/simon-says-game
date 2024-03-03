@@ -6,13 +6,13 @@ window.onload = function () {
   const highScoreElt = document.getElementById("high-score");
   const maxSequenceLength = 12;
   const audioFiles = {
-    blueSound: "./sounds/blue.mp3",
-    redSound: "./sounds/red.mp3",
-    yellowSound: "./sounds/yellow.mp3",
-    greenSound: "./sounds/green.mp3",
-    loseSound: "./sounds/game-over.wav",
-    winSound: "./sounds/game-win.wav",
-    wrongSound: "./sounds/wrong.mp3",
+    blueSound: "../sounds/blue.mp3",
+    redSound: "../sounds/red.mp3",
+    yellowSound: "../sounds/yellow.mp3",
+    greenSound: "../sounds/green.mp3",
+    loseSound: "../sounds/game-over.wav",
+    winSound: "../sounds/game-win.wav",
+    wrongSound: "../sounds/wrong.mp3",
   };
   let sequence = [];
   let tilesSelected = [];
@@ -45,11 +45,14 @@ window.onload = function () {
         setTimeout(function () {
           tile.classList.add("inactive");
           board.classList.remove("unclickable");
-          if (sequence.length === maxSequenceLength && sequence[index] === sequence[sequence.length - 1]) {
+          if (
+            sequence.length === maxSequenceLength &&
+            sequence[index] === sequence[sequence.length - 1]
+          ) {
             GameEnded(true);
           }
         }, 500);
-      }, index * 700);
+      }, index * 1300);
     });
   }
 
@@ -101,8 +104,11 @@ window.onload = function () {
     resetSelection();
     resetSequence();
     resetScore();
-    extendSequence();
-    displaySequence(sequence);
+    if (winState) {
+      extendSequence();
+      levelElt.innerHTML = sequence.length;
+      displaySequence(sequence);
+    }
   }
 
   function playerClicks(selection) {
