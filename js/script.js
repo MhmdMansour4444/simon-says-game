@@ -37,26 +37,28 @@ window.onload = function () {
   });
 
   function displaySequence(sequence) {
-    board.classList.add("unclickable");
+    setBoardState(false);
     sequence.forEach(function (color, index) {
       setTimeout(function () {
         const tile = document.querySelector(`[data-tile="${color}"]`);
         tile.classList.remove("inactive");
         setTimeout(function () {
           tile.classList.add("inactive");
-          board.classList.remove("unclickable");
-          if (
-            sequence.length === maxSequenceLength &&
-            sequence[index] === sequence[sequence.length - 1]
-          ) {
-            GameEnded(true);
-          }
+          setBoardState(true);
         }, 500);
       }, index * 1300);
     });
   }
 
   //// new functions
+  function setBoardState(clickableState){
+    if(clickableState){
+      board.classList.remove("unclickable");
+    }
+    else{
+      board.classList.add("unclickable")
+    }
+  }
 
   function resetSelection() {
     tilesSelected.splice(0, tilesSelected.length);
@@ -71,9 +73,14 @@ window.onload = function () {
   }
 
   function extendSequence() {
+    if (sequence.length === maxSequenceLength) {
+      GameEnded(true);
+    }
+   
     const randomIndex = Math.floor(Math.random() * colors.length);
     sequence.push(colors[randomIndex]);
     levelElt.innerHTML = sequence.length;
+    
   }
 
   function isSequenceCorrect() {
@@ -88,7 +95,7 @@ window.onload = function () {
   function increaseScore() {
     score++;
     if (score > highestScore) highestScore = score;
-    highScoreElt.innerHTML = highestScore;
+    highScoreElt.innerHTML = highestScore ;
   }
 
   function resetScore() {
@@ -97,7 +104,12 @@ window.onload = function () {
 
   function GameEnded(winState) {
     if (winState) {
-      alert("You Won :)");
+      setTimeout(() => {
+      var audio = new Audio(audioFiles.gameWin);
+      audio.play();
+      }, 1000);
+      infoText.textContent =
+      "YOU WON!! Press PLAY to start again";
 
     } else {
       var audio = new Audio(audioFiles.wrong);
@@ -109,11 +121,7 @@ window.onload = function () {
     resetSelection();
     resetSequence();
     resetScore();
-    if (winState) {
-      extendSequence();
-      levelElt.innerHTML = sequence.length;
-      displaySequence(sequence);
-    }
+    
   }
 
   function playerClicks(selection) {
@@ -127,6 +135,7 @@ window.onload = function () {
       // Sequence is Correct
       if (isSequenceComplete()) {
         extendSequence();
+        //stop if ended
         resetSelection();
         increaseScore();
         displaySequence(sequence);
@@ -134,10 +143,6 @@ window.onload = function () {
     } else  {
       //Sequence is Wrong
       GameEnded(false);
-      setTimeout(() => {
-        window.location.href = window.location.href;
-      return;
-      }, 1000);
     }
   }
 };
