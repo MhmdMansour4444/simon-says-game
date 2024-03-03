@@ -6,13 +6,13 @@ window.onload = function () {
   const highScoreElt = document.getElementById("high-score");
   const maxSequenceLength = 12;
   const audioFiles = {
-    blueSound: "../sounds/blue.mp3",
-    redSound: "../sounds/red.mp3",
-    yellowSound: "../sounds/yellow.mp3",
-    greenSound: "../sounds/green.mp3",
-    loseSound: "../sounds/game-over.wav",
-    winSound: "../sounds/game-win.wav",
-    wrongSound: "../sounds/wrong.mp3",
+    blue: "sounds/blue.mp3",
+    red: "sounds/red.mp3",
+    yellow: "sounds/yellow.mp3",
+    green: "sounds/green.mp3",
+    gameOver: "sounds/game-over.wav",
+    gameWin: "sounds/game-win.wav",
+    wrong: "sounds/wrong.mp3",
   };
   let sequence = [];
   let tilesSelected = [];
@@ -98,8 +98,13 @@ window.onload = function () {
   function GameEnded(winState) {
     if (winState) {
       alert("You Won :)");
+
     } else {
-      alert("You Lost!");
+      var audio = new Audio(audioFiles.wrong);
+      audio.play();
+      infoText.textContent =
+      "GAME OVER!";
+
     }
     resetSelection();
     resetSequence();
@@ -126,11 +131,13 @@ window.onload = function () {
         increaseScore();
         displaySequence(sequence);
       }
-    } else {
+    } else  {
       //Sequence is Wrong
       GameEnded(false);
-
+      setTimeout(() => {
+        window.location.href = window.location.href;
       return;
+      }, 1000);
     }
   }
 };
