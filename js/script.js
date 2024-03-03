@@ -4,14 +4,15 @@ window.onload = function () {
   const board = document.querySelector(".board");
   const levelElt = document.getElementById("level");
   const highScoreElt = document.getElementById("high-score");
+  const maxSequenceLength = 12;
   const audioFiles = {
-    blueSound: "sounds/blue.mp3",
-    redSound: "sounds/red.mp3",
-    yellowSound: "sounds/yellow.mp3",
-    greenSound: "sounds/green.mp3",
-    loseSound: "sounds/game-over.wav",
-    winSound: "sounds/game-win.wav",
-    wrongSound: "sounds/wrong.mp3",
+    blueSound: "./sounds/blue.mp3",
+    redSound: "./sounds/red.mp3",
+    yellowSound: "./sounds/yellow.mp3",
+    greenSound: "./sounds/green.mp3",
+    loseSound: "./sounds/game-over.wav",
+    winSound: "./sounds/game-win.wav",
+    wrongSound: "./sounds/wrong.mp3",
   };
   let sequence = [];
   let tilesSelected = [];
@@ -44,6 +45,9 @@ window.onload = function () {
         setTimeout(function () {
           tile.classList.add("inactive");
           board.classList.remove("unclickable");
+          if (sequence.length === maxSequenceLength && sequence[index] === sequence[sequence.length - 1]) {
+            GameEnded(true);
+          }
         }, 500);
       }, index * 700);
     });
@@ -89,16 +93,21 @@ window.onload = function () {
   }
 
   function GameEnded(winState) {
-    if (winState) alert("You Won :)");
-    else alert("You Lost!");
+    if (winState) {
+      alert("You Won :)");
+    } else {
+      alert("You Lost!");
+    }
     resetSelection();
     resetSequence();
     resetScore();
+    extendSequence();
+    displaySequence(sequence);
   }
 
   function playerClicks(selection) {
     tilesSelected.push(selection);
-    const audio = new Audio(audioFiles[selection]);
+    var audio = new Audio(audioFiles[selection]);
     audio.play();
     console.log("PlayerSelected");
     console.log(tilesSelected);
